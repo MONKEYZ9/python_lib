@@ -13,4 +13,6 @@ with open('C://Users\mingzzang\Desktop\step4.json', 'r', encoding='euc-kr') as j
     print(json_object)
     print(json_object["남양주"])
     print(json_object["함흥차사"])
+    print(json_object['\n']['청년'])
 
+# json은 key와 value 값으로 나누어지게 된다.

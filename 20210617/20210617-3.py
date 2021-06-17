@@ -30,3 +30,11 @@ with open('C://Users\mingzzang\Desktop\step3.csv', 'r') as csv_file:
     #     arr.append(line[i])
     #     print(arr)
     #     arr=[]
+# import csv
+# with open('C://Users\mingzzang\Desktop\step3.csv', 'r') as csv_file:
+#     csv_reader = csv.reader(csv_file)
+    # <_csv.reader object at 0x00000247E4C8C700>
+    # print(csv_reader)
+    # for i in csv_reader:
+    #     print(i)
+    # 로그를 찍는 걸 잘 해봐야해
