@@ -21,6 +21,8 @@ print( "[실평수계산기] : {}".format(myModule.실평수계산기("이상민
 
 id_input = input()
 pw_input = input()
-print("[txt 로그인 성공여부] : {}".format(myModule.loginCheck_txt_version("이상민", id_input, pw_input)))
-print("[xlsx 로그인 성공여부] : {}".format(myModule.loginCheck_xlsx_version("이상민", id_input, pw_input)))
-print("[csv 로그인 성공여부] : {}".format(myModule.loginCheck_csv_version("이상민", id_input, pw_input)))
+print("[txt 로그인 성공여부] : {}".format(myModule.loginCheck_txt_version(id_input, pw_input)))
+print("[xlsx 로그인 성공여부] : {}".format(myModule.loginCheck_xlsx_version(id_input, pw_input)))
+print("[csv 로그인 성공여부] : {}".format(myModule.loginCheck_csv_version(id_input, pw_input)))
+
+print("[txt 가입 성공여부] : {}".format(myModule.join()))
