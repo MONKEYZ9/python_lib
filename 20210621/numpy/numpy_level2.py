@@ -30,3 +30,5 @@ def set_lottoNumber():
             continue
         
 print(set_lottoNumber())
+
+# 로또번호 생성완료 : [20  4 16 16  1 25 17]
