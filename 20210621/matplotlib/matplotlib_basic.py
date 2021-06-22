@@ -12,7 +12,7 @@ plt.ylabel("value")
 
 
 
-df = pd.read_csv('C:/Users/mingzzang/Desktop/PART17-20210621T020629Z-001/PART17/dataset/commerce.csv', encoding='unicode_escape')
+df = pd.read_csv('C:/Users/mingzzang/Desktop/20210617/PART17-20210621T020629Z-001/PART17/dataset/commerce.csv', encoding='unicode_escape')
 print(df)
 
 print('-------------------------------------------------------')
@@ -57,80 +57,80 @@ ax1.plot(year_InvoiceDate_sum.index, year_InvoiceDate_sum.values)
 # 그래프를 그리면 항목값을 바꿔주는거야
 ax1.set_xticks(np.unique(df["year_InvoiceDate"]))
 # 순정값만 뽑아주는거야 그렇게 그림을 구성
-# plt.show()
-
-# 이거는 월별로 구분하는거야
-month_InvoiceDate_sum = df.groupby('month_InvoiceDate').UnitPrice.sum()
-# ax2.scatter(month_InvoiceDate_sum.index, month_InvoiceDate_sum.values)
-# autopct='%0.2f%%' 소수점 나타내주는거야
-ax2.pie( month_InvoiceDate_sum.values, labels=month_InvoiceDate_sum.index, autopct='%0.2f%%' )
-ax2.set_xticks(np.unique(df["month_InvoiceDate"]))
-# 파이차트로 보는거야
-# plt.show()
-
-# 나라로 구분하는거야
-Country_sum = df.groupby('Country').UnitPrice.sum()
-# ax3.pie(Country_sum.values, labels = Country_sum.index, autopct='%0.2f%%')
-ax3.scatter(Country_sum.index, Country_sum.values)
-# 라벨 바꾸려고 하는거야
-ax3.set_xticklabels(np.unique(df["Country"]), rotation=45 )
-# plt.show()
-
-# 막대 그래프로 찍을건데 
-CustomerID_sum = df.groupby('CustomerID').UnitPrice.sum()
-ax4.bar(CustomerID_sum.index, CustomerID_sum.values)
-# plt.show()
-
-# 사분위수
-ax5.boxplot(df['UnitPrice'])
-# 금액이 4분위수 안에서 놀아
-# plt.show()
-
-# --------------------------------------------------------------------------------------
-# 한 그래프에서 여러 선을 보여주기
-
-# year_InvoiceDate_sum.index, year_InvoiceDate_sum.values
-unique_customerid = np.unique(df['CustomerID'])
-# 유니크를 씀으로 중복을 없애고
-color_sharp = ['r.', 'b.', 'y.', 'm.', 'g.', 'k.', 'c.']
-# 모양을 미리 지정하는걸
-
-plt.figure(figsize=(15, 10))
-
-for i in range( 6 ) :
-  plt.plot( df[(df['CustomerID'] == unique_customerid[i])].month_InvoiceDate, alpha=0.7)
-  # plt.plot( df[(df['CustomerID'] == 17850.0)].month_InvoiceDate, 'r.' )
-  # plt.plot( df[(df['CustomerID'] == 12680.0)].month_InvoiceDate, 'b.' )
-
-plt.legend(unique_customerid[0:6])
-# plt.show()
-
-
-# -----------------------------------------------------------------------------------
-
-plt.figure(figsize=(20,10))
-df.boxplot()
-# boxplot을 정리를 다시 하자!!
-# plt.show()
-
-# -----------------------------------------------------------------------------
-
-import seaborn as sns
-
-
-sns.jointplot(x="month_InvoiceDate", y="UnitPrice", data=df.loc[0:300])
-#                                                              loc으로 해서 끊어놨는데 안끊으면 뻗어 오래걸려
-# 밑에 제목 달았다.
-plt.suptitle("month_InvoiceDate & UnitPrice Joint Plot", y=1.02)
-# plt.show()
-
-# -----------------------------------------------------------------------------
-# 페어 플롯은 더 느려
-sns.pairplot(df.loc[0:100])
-plt.title("Ecommerce Data Pair Plot")
 plt.show()
 
-# -----------------------------------------------------------------------------
+# # 이거는 월별로 구분하는거야
+# month_InvoiceDate_sum = df.groupby('month_InvoiceDate').UnitPrice.sum()
+# # ax2.scatter(month_InvoiceDate_sum.index, month_InvoiceDate_sum.values)
+# # autopct='%0.2f%%' 소수점 나타내주는거야
+# ax2.pie( month_InvoiceDate_sum.values, labels=month_InvoiceDate_sum.index, autopct='%0.2f%%' )
+# ax2.set_xticks(np.unique(df["month_InvoiceDate"]))
+# # 파이차트로 보는거야
+# # plt.show()
+
+# # 나라로 구분하는거야
+# Country_sum = df.groupby('Country').UnitPrice.sum()
+# # ax3.pie(Country_sum.values, labels = Country_sum.index, autopct='%0.2f%%')
+# ax3.scatter(Country_sum.index, Country_sum.values)
+# # 라벨 바꾸려고 하는거야
+# ax3.set_xticklabels(np.unique(df["Country"]), rotation=45 )
+# # plt.show()
+
+# # 막대 그래프로 찍을건데 
+# CustomerID_sum = df.groupby('CustomerID').UnitPrice.sum()
+# ax4.bar(CustomerID_sum.index, CustomerID_sum.values)
+# # plt.show()
+
+# # 사분위수
+# ax5.boxplot(df['UnitPrice'])
+# # 금액이 4분위수 안에서 놀아
+# # plt.show()
+
+# # --------------------------------------------------------------------------------------
+# # 한 그래프에서 여러 선을 보여주기
+
+# # year_InvoiceDate_sum.index, year_InvoiceDate_sum.values
+# unique_customerid = np.unique(df['CustomerID'])
+# # 유니크를 씀으로 중복을 없애고
+# color_sharp = ['r.', 'b.', 'y.', 'm.', 'g.', 'k.', 'c.']
+# # 모양을 미리 지정하는걸
+
+# plt.figure(figsize=(15, 10))
+
+# for i in range( 6 ) :
+#   plt.plot( df[(df['CustomerID'] == unique_customerid[i])].month_InvoiceDate, alpha=0.7)
+#   # plt.plot( df[(df['CustomerID'] == 17850.0)].month_InvoiceDate, 'r.' )
+#   # plt.plot( df[(df['CustomerID'] == 12680.0)].month_InvoiceDate, 'b.' )
+
+# plt.legend(unique_customerid[0:6])
+# # plt.show()
+
+
+# # -----------------------------------------------------------------------------------
+
+# plt.figure(figsize=(20,10))
+# df.boxplot()
+# # boxplot을 정리를 다시 하자!!
+# # plt.show()
+
+# # -----------------------------------------------------------------------------
+
+# import seaborn as sns
+
+
+# sns.jointplot(x="month_InvoiceDate", y="UnitPrice", data=df.loc[0:300])
+# #                                                              loc으로 해서 끊어놨는데 안끊으면 뻗어 오래걸려
+# # 밑에 제목 달았다.
+# plt.suptitle("month_InvoiceDate & UnitPrice Joint Plot", y=1.02)
+# # plt.show()
+
+# # -----------------------------------------------------------------------------
+# # 페어 플롯은 더 느려
+# sns.pairplot(df.loc[0:100])
+# plt.title("Ecommerce Data Pair Plot")
+# plt.show()
+
+# # -----------------------------------------------------------------------------
 
 
 
