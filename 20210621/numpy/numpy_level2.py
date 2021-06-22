@@ -21,7 +21,7 @@ def set_lottoNumber():
     # 뽑아냈는데 중복이 있을 수 있으니까
     # print(unique_lottoNumber)
     while True:
-        first_lottoNumber = np.random.randint(0, 45, size=6)
+        first_lottoNumber = np.random.randint(1, 45, size=6)
         unique_lottoNumber = np.unique(first_lottoNumber)
         if len(unique_lottoNumber) == 6:
             return unique_lottoNumber
