@@ -57,29 +57,29 @@ ax1.plot(year_InvoiceDate_sum.index, year_InvoiceDate_sum.values)
 # 그래프를 그리면 항목값을 바꿔주는거야
 ax1.set_xticks(np.unique(df["year_InvoiceDate"]))
 # 순정값만 뽑아주는거야 그렇게 그림을 구성
+# plt.show()
+
+# 이거는 월별로 구분하는거야
+month_InvoiceDate_sum = df.groupby('month_InvoiceDate').UnitPrice.sum()
+# ax2.scatter(month_InvoiceDate_sum.index, month_InvoiceDate_sum.values)
+# autopct='%0.2f%%' 소수점 나타내주는거야
+ax2.pie( month_InvoiceDate_sum.values, labels=month_InvoiceDate_sum.index, autopct='%0.2f%%' )
+ax2.set_xticks(np.unique(df["month_InvoiceDate"]))
+# 파이차트로 보는거야
 plt.show()
 
-# # 이거는 월별로 구분하는거야
-# month_InvoiceDate_sum = df.groupby('month_InvoiceDate').UnitPrice.sum()
-# # ax2.scatter(month_InvoiceDate_sum.index, month_InvoiceDate_sum.values)
-# # autopct='%0.2f%%' 소수점 나타내주는거야
-# ax2.pie( month_InvoiceDate_sum.values, labels=month_InvoiceDate_sum.index, autopct='%0.2f%%' )
-# ax2.set_xticks(np.unique(df["month_InvoiceDate"]))
-# # 파이차트로 보는거야
-# # plt.show()
+# 나라로 구분하는거야
+Country_sum = df.groupby('Country').UnitPrice.sum()
+# ax3.pie(Country_sum.values, labels = Country_sum.index, autopct='%0.2f%%')
+ax3.scatter(Country_sum.index, Country_sum.values)
+# 라벨 바꾸려고 하는거야
+ax3.set_xticklabels(np.unique(df["Country"]), rotation=45 )
+# plt.show()
 
-# # 나라로 구분하는거야
-# Country_sum = df.groupby('Country').UnitPrice.sum()
-# # ax3.pie(Country_sum.values, labels = Country_sum.index, autopct='%0.2f%%')
-# ax3.scatter(Country_sum.index, Country_sum.values)
-# # 라벨 바꾸려고 하는거야
-# ax3.set_xticklabels(np.unique(df["Country"]), rotation=45 )
-# # plt.show()
-
-# # 막대 그래프로 찍을건데 
-# CustomerID_sum = df.groupby('CustomerID').UnitPrice.sum()
-# ax4.bar(CustomerID_sum.index, CustomerID_sum.values)
-# # plt.show()
+# 막대 그래프로 찍을건데 
+CustomerID_sum = df.groupby('CustomerID').UnitPrice.sum()
+ax4.bar(CustomerID_sum.index, CustomerID_sum.values)
+# plt.show()
 
 # # 사분위수
 # ax5.boxplot(df['UnitPrice'])

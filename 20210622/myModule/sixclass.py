@@ -106,5 +106,5 @@ class Six_Class :
     msg = MIMEText(txt)
     msg['Subject'] = '[광주인공지능] 스마트 전기고지서'
   
-    s.sendmail(self.email, self.email, msg.as_string()) # 보내는 이메일 / 받는 이메일
+    s.sendmail(self.email, "sangmin3285@gmail.com", msg.as_string()) # 보내는 이메일 / 받는 이메일
     s.quit()
