@@ -3,20 +3,20 @@ import numpy as np
 import os
 import bisect
 from csv import writer
+from modules import error_catch
+from texttable import Texttable
 
 
 # 상품을 장르별로도 검색해볼 수는 없을까요?
 # 단순히 구매하기 말고, csv 파일을 DB 처럼 활용하는 방법으로 장바구니도 구현할 수 있을것 같습니다.
 class Commerce6_product :
-  def __init__(self, id, pw) :
+  def __init__(self, id, nickname) :
     self.id = id
-    self.pw = pw
-    self.product_df = pd.read_csv("C:/Users/mingzzang/Desktop/bestsellers with categories.csv")
-    self.login_df = pd.read_csv("C:/Users/mingzzang/Desktop/idPw.csv")
+    self.nickname = nickname
+    self.product_df = pd.read_csv(r".\database\product\bestsellers with categories.csv")
 
   # 메인 모듈
   def product_infomation_resule(self) :
-    nickname = self.login_df.loc[(self.login_df['id'] == self.id) & (self.login_df['pw'] == self.pw)]['nickname'].values[0]
     product_df = self.product_df
 
     # 장바구니 생성
@@ -31,7 +31,7 @@ class Commerce6_product :
 
         # 처음 책 목록의 갯수는 20개
         book_countStart = 0
-        book_countEnd = 20
+        book_countEnd = 10
 
         # 카테고리별 목록으로 검색
         product_choice_options = int(input("평점높은순(1) / 리뷰많은순(2) / 낮은가격순(3) / 높은가격순(4) / 최신출시순(5) / 장르별(6): "))
@@ -57,23 +57,27 @@ class Commerce6_product :
           if book_countStart == 520:
             book_countEnd = 547
 
+          books_list_table = Texttable()
+          books_list_table.set_cols_width([4, 50, 10, 5, 8, 8, 4, 11])
+          books_list_table.set_cols_dtype(["t", "t", "t", "t", "t", "t", "t", "t"])
+          books_list_table_rows = [['No', 'Title', 'Author', 'Rate', 'Reviews', 'Price', 'Year', 'Genre']]
           for i in range( book_countStart, book_countEnd ) :
-            print( "-------------------------------" )
-            print( "-{} 번째 서적번호------------------".format(i+1) )
-            print( "-------------------------------" )
+            book_info = [i+1]
             for j in range( len(product_df.columns) ) :
               if j == 4 :
-                print( "{} : {} 원".format(product_df.columns.to_list()[j], format(product_df.loc[i][j]*1000, ",") ) )
+                book_info.append(f"{format(product_df.loc[i][j]*1000, ',')}원")
               else :
-                print( "{} : {}".format(product_df.columns.to_list()[j], product_df.loc[i][j]) )
-            print( "-------------------------------" )
+                book_info.append(str(product_df.loc[i][j]))
+            books_list_table_rows.append(book_info)
+          books_list_table.add_rows(books_list_table_rows)
+          print(books_list_table.draw())
 
           # 해당 목록에 맘에 드는 책이 없을때
           next_list = int(input("찾으시는 책이 있으신가요?\r\n(있다면 (1) / 없다면 아무버튼이나 눌러주세요) : "))
           if next_list == 1:
             choice_product_booknumber = int(input("구매하실 서적 번호를 입력 : "))
 
-            print( f"{nickname} 님, 구매 신청하신 서적은 {product_df.loc[choice_product_booknumber-1][0]} 입니다.")
+            print( f"{self.nickname} 님, 구매 신청하신 서적은 {product_df.loc[choice_product_booknumber-1][0]} 입니다.")
             print( f"가격은 {product_df.loc[choice_product_booknumber][4]*1000} 원입니다.")
             
             book_choice_df = product_df.loc[choice_product_booknumber-1]
@@ -99,8 +103,8 @@ class Commerce6_product :
               self.bag_pack(book_name, book_author, book_price, book_Year)
               # 장바구니에 있는 물품 확인하기
               price_hab, book_names = self.bag_check()
-              print(f'{nickname}님의 장바구니에 담긴 책 목록은 {book_names} 입니다.')
-              print(f'{nickname}님의 장바구니에 담긴 책 목록의 총 가격은 {price_hab} 입니다.')
+              print(f'{self.nickname}님의 장바구니에 담긴 책 목록은 {book_names} 입니다.')
+              print(f'{self.nickname}님의 장바구니에 담긴 책 목록의 총 가격은 {price_hab * 1000}원 입니다.')
               bag_order = int(input("장바구니에 담긴 책 목록을 구매하시겠습니까?\r\n(바로 구매 (1) / 다른 책 목록 검색하기 (아무버튼이나 눌러주세요)) : "))
               if bag_order == 1:
                 return book_names, price_hab
@@ -110,8 +114,8 @@ class Commerce6_product :
             next_choice = int(input("다음 목록으로 갈까요?\r\n(다음목록 (1) / 책 검색 또는 새로운 카테고리로 보려면 (아무버튼이나 눌러주세요)) : "))
             # 검색할거랑 다음 목록 보여줄걸 하자
             if next_choice == 1:
-              book_countStart += 20
-              book_countEnd += 20
+              book_countStart += 10
+              book_countEnd += 10
             else:
               print('책 검색 또는 새로운 카테고리 검색으로 갑니다.')
               break
@@ -143,8 +147,8 @@ class Commerce6_product :
           self.bag_pack(book_name, book_author, book_price, book_Year)
           # 장바구니에 있는 물품 확인하기
           price_hab, book_names = self.bag_check()
-          print(f'{nickname}님의 장바구니에 담긴 책 목록은 {book_names} 입니다.')
-          print(f'{nickname}님의 장바구니에 담긴 책 목록의 총 가격은 {price_hab} 입니다.')
+          print(f'{self.nickname}님의 장바구니에 담긴 책 목록은 {book_names} 입니다.')
+          print(f'{self.nickname}님의 장바구니에 담긴 책 목록의 총 가격은 {price_hab * 1000}원 입니다.')
           bag_order = int(input("장바구니에 담긴 책 목록을 구매하시겠습니까?\r\n(바로 구매 (1) / 다른 책 목록 검색하기 (아무버튼이나 눌러주세요)) : "))
           if bag_order == 1:
             return book_names, price_hab
@@ -154,7 +158,7 @@ class Commerce6_product :
   # 장바구니를 먼저 만들자
   def bag_make(self):
     product_book_df = pd.DataFrame(columns=['Name', 'Author', 'Rating', 'Reviews', 'Price', 'Year', 'Genre'])
-    product_book_df.to_csv(f'C:/Users/mingzzang/Desktop/bag_{self.id}.csv')
+    product_book_df.to_csv(f'./database/purchase/bag_{self.id}.csv')
  
   # 장바구니에 담자
   def bag_pack(self, book_name, book_author, book_price, book_Year):
@@ -166,9 +170,9 @@ class Commerce6_product :
     user_book_list = [0]
 
     for i in range(7):
-        user_book_list.append(user_book[0][i])
+      user_book_list.append(user_book[0][i])
 
-    with open(f'C:/Users/mingzzang/Desktop/bag_{self.id}.csv', 'a', newline='') as f:
+    with open(f'./database/purchase/bag_{self.id}.csv', 'a', newline='') as f:
       writer_object = writer(f)
       writer_object.writerow(user_book_list)
       f.close()
@@ -256,7 +260,7 @@ class Commerce6_product :
                   if author_location < len(author_series) and author_name == author_series[author_location]:
                       print(f'찾으시는 {author_name} 작가의 책이 존재합니다')
                       index_list = self.search_list(author_series, author_location, author_name)
-                      search_completed = self.product_df.loc[index_list, ['Name', 'Author', 'Price', 'Year']]
+                      search_completed = author_df.loc[index_list, ['Name', 'Author', 'Price', 'Year']]
                       print(search_completed)
                       return search_completed
                   else:
@@ -273,8 +277,7 @@ class Commerce6_product :
 
   # 장바구니 가격 및 품목들 확인하기
   def bag_check(self):
-    product_user_book_df = pd.read_csv(f'C:/Users/mingzzang/Desktop/bag_{self.id}.csv')
-    print(product_user_book_df['Price'].values)
+    product_user_book_df = pd.read_csv(f'./database/purchase/bag_{self.id}.csv')
     price_hab = sum(product_user_book_df['Price'].values)
     book_names = product_user_book_df['Name'].values
     return price_hab, book_names
@@ -282,23 +285,20 @@ class Commerce6_product :
   # 영수증 뽑기
   # 먼저, 고객이 내는 돈에 대해 이야기하자
   def make_change(self, book_name, book_price):
-    login_df = self.login_df
-    # login_df = pd.read_csv("C:/Users/mingzzang/Desktop/idPw.csv")
     os.system('cls')
-    nickname = login_df.loc[(login_df['id'] == self.id) & (login_df['pw'] == self.pw)]['nickname'].values[0]
     while True:
-      customer_pay = int(input(f"{nickname}님께서 구입하시려는 {book_name}의 가격은 {book_price}원입니다.\r\n하실 금액을 적어주세요(단위 원) : "))
+      customer_pay = int(input(f"{self.nickname}님께서 구입하시려는 {book_name}의 가격은 {book_price * 1000}원입니다.\r\n하실 금액을 적어주세요(단위 원) : "))
       if customer_pay < book_price:
-        print(f"{nickname}님께서 지불하시려는 금액이 너무 작습니다.")
+        print(f"{self.nickname}님께서 지불하시려는 금액이 너무 작습니다.")
       else:
         break
     while True:
       print('------------------------------------------------------------------------------------------')
-      customer_email = input(f"{nickname}님께서\r\n지불하신 {customer_pay}원과 {book_name}의 가격 {book_price}원입니다. \r\n 거스름돈은 {customer_pay - book_price}원 입니다. \r\n 영수증은 입력해주신 메일로 보내드리겠습니다. \r\n 이메일을 입력하세요 : ")
+      customer_email = input(f"{self.nickname}님께서\r\n지불하신 {customer_pay}원과 {book_name}의 가격 {book_price * 1000}원입니다. \r\n 거스름돈은 {customer_pay - (book_price*1000)}원 입니다. \r\n 영수증은 입력해주신 메일로 보내드리겠습니다. \r\n 이메일을 입력하세요 : ")
       if '@' not in customer_email:
-        print(f"{nickname}님의 이메일 형식이 잘못되었습니다.")
+        print(f"{self.nickname}님의 이메일 형식이 잘못되었습니다.")
         continue
       else:
         break
     print('------------------------------------------------------------------------------------------')
-    return nickname, customer_pay, book_name, book_price, customer_email
+    return customer_pay, customer_email
